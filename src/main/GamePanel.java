@@ -12,7 +12,7 @@ import java.awt.Color;
 public class GamePanel extends JPanel implements Runnable {
   final int originalTileSize = 16; // 16x16 tile -> but we will scale it up
   final int scale = 3;
-  final int tileSize = originalTileSize * scale; // 48x48 tile
+  public final int tileSize = originalTileSize * scale; // 48x48 tile
 
   final int maxScreenCol = 16;
   final int maxScreenRow = 12;
@@ -57,8 +57,8 @@ public class GamePanel extends JPanel implements Runnable {
       delta += (currentTime - lastTime) / timePerFrame;
 
       if (delta >= 1) {
-        update();
-        repaint();
+        this.player.update(); // update the position of the player
+        repaint(); // repaint the player
         delta--;
       }
 
@@ -66,27 +66,13 @@ public class GamePanel extends JPanel implements Runnable {
     }
   }
 
-  public void update() {
-    if (keyHandler.upPressed) {
-      playerY -= playerSpeed;
-    }
-    if (keyHandler.downPressed) {
-      playerY += playerSpeed;
-    }
-    if (keyHandler.leftPressed) {
-      playerX -= playerSpeed;
-    }
-    if (keyHandler.rightPressed) {
-      playerX += playerSpeed;
-    }
-  }
-
   public void paintComponent(Graphics graphics) {
     super.paintComponent(graphics);
 
     Graphics2D graphics2d = (Graphics2D) graphics;
-    graphics2d.setColor(Color.white);
-    graphics2d.fillRect(playerX, playerY, tileSize, tileSize);
+
+    this.player.draw(graphics2d);
+
     graphics2d.dispose();
   }
 }
