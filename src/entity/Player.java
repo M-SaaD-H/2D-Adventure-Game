@@ -12,16 +12,20 @@ public class Player extends Entity {
   GamePanel gamePanel;
   KeyHandler keyHandler;
 
+  public final int playerX, playerY;
+
   public Player(GamePanel gamePanel, KeyHandler keyHandler) {
     this.gamePanel = gamePanel;
     this.keyHandler = keyHandler;
+    this.playerX = (gamePanel.screenWidth - gamePanel.tileSize)/2;
+    this.playerY = (gamePanel.screenHeight - gamePanel.tileSize)/2;
     this.setDefaultValues();
     this.getPlayerImage();
   }
 
   public void setDefaultValues() {
-    this.x = 100;
-    this.y = 100;
+    this.worldX = gamePanel.tileSize * 23;
+    this.worldY = gamePanel.tileSize * 21;
     this.speed = 4;
     this.direction = Direction.DOWN;
   }
@@ -40,19 +44,19 @@ public class Player extends Entity {
     // Player is moving - handle movement and animation
     if (keyHandler.upPressed) {
       this.direction = Direction.UP;
-      this.y -= this.speed;
+      this.worldY -= this.speed;
     }
     if (keyHandler.downPressed) {
       this.direction = Direction.DOWN;
-      this.y += this.speed;
+      this.worldY += this.speed;
     }
     if (keyHandler.leftPressed) {
       this.direction = Direction.LEFT;
-      this.x -= this.speed;
+      this.worldX -= this.speed;
     }
     if (keyHandler.rightPressed) {
       this.direction = Direction.RIGHT;
-      this.x += this.speed;
+      this.worldX += this.speed;
     }
 
     // Animate walking
@@ -98,6 +102,6 @@ public class Player extends Entity {
         break;
     }
 
-    graphics2d.drawImage(this.currentImage, this.x, this.y, gamePanel.tileSize, gamePanel.tileSize, null);
+    graphics2d.drawImage(this.currentImage, this.playerX, this.playerY, gamePanel.tileSize, gamePanel.tileSize, null);
   }
 }
