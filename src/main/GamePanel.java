@@ -26,11 +26,6 @@ public class GamePanel extends JPanel implements Runnable {
   final KeyHandler keyHandler = new KeyHandler();
   Player player = new Player(this, this.keyHandler);
 
-  // Initial player position
-  int playerX = 100;
-  int playerY = 100;
-  int playerSpeed = 4;
-
   public GamePanel() {
     this.setPreferredSize(new Dimension(screenWidth, screenHeight));
     this.setBackground(Color.black);
