@@ -27,8 +27,8 @@ public class Player extends Entity {
     this.solidArea = new Rectangle();
     this.solidArea.x = gamePanel.tileSize * 1/4;
     this.solidArea.y = gamePanel.tileSize * 1/4;
-    this.solidArea.width = gamePanel.tileSize * 3/4;
-    this.solidArea.height = gamePanel.tileSize * 3/4;
+    this.solidArea.width = gamePanel.tileSize * 1/2;
+    this.solidArea.height = gamePanel.tileSize * 1/2;
   }
 
   public void setDefaultValues() {

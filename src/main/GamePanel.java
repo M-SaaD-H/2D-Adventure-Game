@@ -3,6 +3,7 @@ package main;
 import javax.swing.JPanel;
 
 import entity.Player;
+import object.SuperObject;
 import tile.TileManager;
 
 import java.awt.Dimension;
@@ -35,6 +36,10 @@ public class GamePanel extends JPanel implements Runnable {
   public Player player = new Player(this, this.keyHandler);
   TileManager tileManager = new TileManager(this);
   public CollisionChecker collisionChecker = new CollisionChecker(this);
+  public AssetSetter assetSetter = new AssetSetter(this);
+
+  // In game objects
+  public SuperObject obj[] = new SuperObject[10]; // 10 objects will be spawned at a time
 
   public GamePanel() {
     this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -42,12 +47,17 @@ public class GamePanel extends JPanel implements Runnable {
     this.setDoubleBuffered(true);
     this.addKeyListener(keyHandler);
     this.setFocusable(true);
+    this.setUpGame();
     this.startGameThread();
   }
 
   public void startGameThread() {
     gameThread = new Thread(this);
     gameThread.start();
+  }
+
+  public void setUpGame() {
+    assetSetter.setObjects();
   }
 
   @Override
@@ -77,6 +87,13 @@ public class GamePanel extends JPanel implements Runnable {
     Graphics2D graphics2d = (Graphics2D) graphics;
 
     this.tileManager.draw(graphics2d);
+
+    for (SuperObject object : obj) {
+      if (object != null) {
+        object.draw(graphics2d, this);
+      }
+    }
+    
     this.player.draw(graphics2d);
 
     graphics2d.dispose();
