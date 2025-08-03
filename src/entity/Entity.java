@@ -20,4 +20,6 @@ public class Entity {
 
   // for collision of character
   public Rectangle solidArea;
+  public boolean collisionOn;
+  public int solidAreaDefaultX, solidAreaDefaultY;
 }

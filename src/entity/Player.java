@@ -14,6 +14,7 @@ public class Player extends Entity {
   KeyHandler keyHandler;
 
   public final int playerX, playerY;
+  int keyCount;
 
   public Player(GamePanel gamePanel, KeyHandler keyHandler) {
     this.gamePanel = gamePanel;
@@ -29,6 +30,10 @@ public class Player extends Entity {
     this.solidArea.y = gamePanel.tileSize * 1/4;
     this.solidArea.width = gamePanel.tileSize * 1/2;
     this.solidArea.height = gamePanel.tileSize * 1/2;
+
+    // Default co-ordinates of solid area
+    this.solidAreaDefaultX = this.solidArea.x;
+    this.solidAreaDefaultY = this.solidArea.y;
   }
 
   public void setDefaultValues() {
@@ -64,8 +69,12 @@ public class Player extends Entity {
     }
 
     // Move the player if it is not colliding with any solid tile
-    boolean isPlayerColliding = gamePanel.collisionChecker.check(this);
-    if (!isPlayerColliding) {
+    gamePanel.collisionChecker.checkTile(this);
+    int objectIdx = gamePanel.collisionChecker.checkObject(this, true);
+
+    pickUpObject(objectIdx);
+
+    if (!this.collisionOn) {
       switch (this.direction) {
         case UP:
           this.worldY -= this.speed;
@@ -83,6 +92,15 @@ public class Player extends Entity {
           break;
       }
 
+      // Validate player position to prevent going out of bounds
+      int maxWorldX = gamePanel.maxWorldCol * gamePanel.tileSize - gamePanel.tileSize;
+      int maxWorldY = gamePanel.maxWorldRow * gamePanel.tileSize - gamePanel.tileSize;
+      
+      if (this.worldX < 0) this.worldX = 0;
+      if (this.worldY < 0) this.worldY = 0;
+      if (this.worldX > maxWorldX) this.worldX = maxWorldX;
+      if (this.worldY > maxWorldY) this.worldY = maxWorldY;
+
       // Animate walking
       this.frameCounter++;
       if (this.frameCounter > 10) { // After every 10 frames (at 60 FPS, about 0.166 seconds), toggle spriteNum to switch the character's image and create a walking animation
@@ -90,6 +108,27 @@ public class Player extends Entity {
 
         this.frameCounter = 0;
       }
+    }
+  }
+
+  public void pickUpObject(int idx) {
+    // invalid object idx
+    if (idx == 999) return;
+
+    String objectName = gamePanel.obj[idx].name;
+
+    switch (objectName) {
+      case "Key":
+        gamePanel.obj[idx] = null; // remove the object from the game
+        this.keyCount++;
+        break;
+      case "Door":
+        if (this.keyCount > 0) {
+          gamePanel.obj[idx] = null; // remove the object from the game
+          this.keyCount--;
+        }
+      default:
+        break;
     }
   }
 
