@@ -1,5 +1,6 @@
 package entity;
 
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 public class Entity {
@@ -16,4 +17,7 @@ public class Entity {
   // To animate the player moving
   public int frameCounter = 0; // we will use this to cout the frames (60FPS) and then change the spriteNum to animate the character
   public int spriteNum = 1;
+
+  // for collision of character
+  public Rectangle solidArea;
 }

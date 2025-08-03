@@ -11,8 +11,8 @@ import main.GamePanel;
 
 public class TileManager {
   GamePanel gamePanel;
-  Tile[] tiles;
-  int[][] tileMap;
+  public Tile[] tiles;
+  public int[][] tileMap;
 
   public TileManager(GamePanel gamePanel) {
     this.gamePanel = gamePanel;
@@ -60,15 +60,18 @@ public class TileManager {
       
       tiles[1] = new Tile();
       tiles[1].image = ImageIO.read(new File("resources/tiles/wall.png"));
-
+      tiles[1].collision = true;
+      
       tiles[2] = new Tile();
       tiles[2].image = ImageIO.read(new File("resources/tiles/water.png"));
-
+      tiles[2].collision = true;
+      
       tiles[3] = new Tile();
       tiles[3].image = ImageIO.read(new File("resources/tiles/earth.png"));
-
+      
       tiles[4] = new Tile();
       tiles[4].image = ImageIO.read(new File("resources/tiles/tree.png"));
+      tiles[4].collision = true;
 
       tiles[5] = new Tile();
       tiles[5].image = ImageIO.read(new File("resources/tiles/sand.png"));
@@ -88,7 +91,15 @@ public class TileManager {
       int screenX = worldX - gamePanel.player.worldX + gamePanel.player.playerX;
       int screenY = worldY - gamePanel.player.worldY + gamePanel.player.playerY;
       
-      graphics2d.drawImage(tiles[tileNum].image, screenX, screenY, gamePanel.tileSize, gamePanel.tileSize, null);
+      // This if is for performance -> redering only the required part
+      if (
+        worldX + gamePanel.tileSize > gamePanel.player.worldX - gamePanel.player.playerX &&
+        worldX - gamePanel.tileSize < gamePanel.player.worldX + gamePanel.player.playerX &&
+        worldY + gamePanel.tileSize > gamePanel.player.worldY - gamePanel.player.playerY &&
+        worldY - gamePanel.tileSize < gamePanel.player.worldY + gamePanel.player.playerY
+      ) {
+        graphics2d.drawImage(tiles[tileNum].image, screenX, screenY, gamePanel.tileSize, gamePanel.tileSize, null);
+      }
 
       worldCol++;
 

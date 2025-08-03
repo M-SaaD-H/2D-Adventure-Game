@@ -1,6 +1,7 @@
 package entity;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.io.File;
 
 import javax.imageio.ImageIO;
@@ -21,6 +22,13 @@ public class Player extends Entity {
     this.playerY = (gamePanel.screenHeight - gamePanel.tileSize)/2;
     this.setDefaultValues();
     this.getPlayerImage();
+
+    // the collision area of the player
+    this.solidArea = new Rectangle();
+    this.solidArea.x = gamePanel.tileSize * 1/4;
+    this.solidArea.y = gamePanel.tileSize * 1/4;
+    this.solidArea.width = gamePanel.tileSize * 3/4;
+    this.solidArea.height = gamePanel.tileSize * 3/4;
   }
 
   public void setDefaultValues() {
@@ -41,30 +49,47 @@ public class Player extends Entity {
       return;
     }
 
-    // Player is moving - handle movement and animation
+    // Change the player movement direction
     if (keyHandler.upPressed) {
       this.direction = Direction.UP;
-      this.worldY -= this.speed;
     }
     if (keyHandler.downPressed) {
       this.direction = Direction.DOWN;
-      this.worldY += this.speed;
     }
     if (keyHandler.leftPressed) {
       this.direction = Direction.LEFT;
-      this.worldX -= this.speed;
     }
     if (keyHandler.rightPressed) {
       this.direction = Direction.RIGHT;
-      this.worldX += this.speed;
     }
 
-    // Animate walking
-    this.frameCounter++;
-    if (this.frameCounter > 10) { // After every 10 frames (at 60 FPS, about 0.166 seconds), toggle spriteNum to switch the character's image and create a walking animation
-      this.spriteNum = this.spriteNum == 1 ? 2 : 1;
+    // Move the player if it is not colliding with any solid tile
+    boolean isPlayerColliding = gamePanel.collisionChecker.check(this);
+    if (!isPlayerColliding) {
+      switch (this.direction) {
+        case UP:
+          this.worldY -= this.speed;
+          break;
+        case DOWN:
+          this.worldY += this.speed;
+          break;
+        case LEFT:
+          this.worldX -= this.speed;
+          break;
+        case RIGHT:
+          this.worldX += this.speed;
+          break;
+        default:
+          break;
+      }
 
-      this.frameCounter = 0;
+      // Animate walking
+      this.frameCounter++;
+      if (this.frameCounter > 10) { // After every 10 frames (at 60 FPS, about 0.166 seconds), toggle spriteNum to switch the character's image and create a walking animation
+        this.spriteNum = this.spriteNum == 1 ? 2 : 1;
+
+        this.frameCounter = 0;
+      }
     }
   }
 
