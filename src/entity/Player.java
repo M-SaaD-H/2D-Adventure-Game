@@ -119,16 +119,19 @@ public class Player extends Entity {
 
     switch (objectName) {
       case "Key":
+        gamePanel.playSoundEffect(1);
         gamePanel.obj[idx] = null; // remove the object from the game
         this.keyCount++;
         break;
-      case "Door":
+        case "Door":
         if (this.keyCount > 0) {
+          gamePanel.playSoundEffect(4);
           gamePanel.obj[idx] = null; // remove the object from the game
           this.keyCount--;
         }
         break;
-      case "Boots":
+        case "Boots":
+        gamePanel.playSoundEffect(2);
         this.speed += 4;
         gamePanel.obj[idx] = null;
         break;
