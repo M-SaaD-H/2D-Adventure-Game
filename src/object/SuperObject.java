@@ -3,6 +3,9 @@ package object;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.io.File;
+
+import javax.imageio.ImageIO;
 
 import main.GamePanel;
 
@@ -16,6 +19,16 @@ public class SuperObject {
   public Rectangle solidArea = new Rectangle(0, 0, 48, 48); // 48 -> TileSize
   public int solidAreaDefaultX = 0;
   public int solidAreaDefaultY = 0;
+
+  public SuperObject(String name) {
+    this.name = name;
+    try {
+      String imagePath = "resources/objects/" + name.toLowerCase() + ".png";
+      this.image = ImageIO.read(new File(imagePath));
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
 
   public void draw(Graphics2D graphics2d, GamePanel gamePanel) {
     int screenX = this.worldX - gamePanel.player.worldX + gamePanel.player.playerX;

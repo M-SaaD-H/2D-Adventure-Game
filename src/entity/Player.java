@@ -127,6 +127,11 @@ public class Player extends Entity {
           gamePanel.obj[idx] = null; // remove the object from the game
           this.keyCount--;
         }
+        break;
+      case "Boots":
+        this.speed += 4;
+        gamePanel.obj[idx] = null;
+        break;
       default:
         break;
     }
