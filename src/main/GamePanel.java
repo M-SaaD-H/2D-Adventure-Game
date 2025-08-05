@@ -28,12 +28,15 @@ public class GamePanel extends JPanel implements Runnable {
   public final int maxWorldCol = 50;
   public final int maxWorldRow = 50;
 
+  public boolean gameEnd = false;
+
   Thread gameThread;
   final KeyHandler keyHandler = new KeyHandler();
   public Player player = new Player(this, this.keyHandler);
   TileManager tileManager = new TileManager(this);
   public CollisionChecker collisionChecker = new CollisionChecker(this);
   public AssetSetter assetSetter = new AssetSetter(this);
+  public UI ui = new UI(this);
   Sound sound = new Sound();
 
   // In game objects
@@ -94,6 +97,8 @@ public class GamePanel extends JPanel implements Runnable {
     }
     
     this.player.draw(graphics2d);
+
+    this.ui.draw(graphics2d);
 
     graphics2d.dispose();
   }

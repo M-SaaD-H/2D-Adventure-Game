@@ -14,7 +14,7 @@ public class Player extends Entity {
   KeyHandler keyHandler;
 
   public final int playerX, playerY;
-  int keyCount;
+  public int keyCount;
 
   public Player(GamePanel gamePanel, KeyHandler keyHandler) {
     this.gamePanel = gamePanel;
@@ -122,19 +122,32 @@ public class Player extends Entity {
         gamePanel.playSoundEffect(1);
         gamePanel.obj[idx] = null; // remove the object from the game
         this.keyCount++;
+        gamePanel.ui.showMessage("You got a key!");
         break;
-        case "Door":
+        
+      case "Door":
         if (this.keyCount > 0) {
           gamePanel.playSoundEffect(4);
           gamePanel.obj[idx] = null; // remove the object from the game
           this.keyCount--;
+          gamePanel.ui.showMessage("You opened a door!");
+        } else {
+          gamePanel.ui.showMessage("You need a key to open the door!");
         }
         break;
-        case "Boots":
+
+      case "Boots":
         gamePanel.playSoundEffect(2);
         this.speed += 4;
+        gamePanel.ui.showMessage("You got new boots!");
         gamePanel.obj[idx] = null;
         break;
+
+      case "Chest":
+        gamePanel.gameEnd = true;
+        gamePanel.pauseMusic();
+        gamePanel.playSoundEffect(3);
+
       default:
         break;
     }
